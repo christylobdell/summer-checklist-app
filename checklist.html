@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Summer Daily Checklist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .task-item input:checked + label {
+            text-decoration: line-through;
+            color: #9ca3af; /* Tailwind gray-400 */
+        }
+        .progress-bar-bg {
+            background-color: #e5e7eb; /* Tailwind gray-200 */
+        }
+        .progress-bar-fill {
+            background-color: #34d399; /* Tailwind emerald-400 */
+            transition: width 0.3s ease-in-out;
+        }
+        .section-card {
+            transition: all 0.3s ease-in-out;
+        }
+        /* Custom scrollbar for a cleaner look if content overflows */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9; /* Tailwind slate-100 */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; /* Tailwind slate-300 */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; /* Tailwind slate-400 */
+        }
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 8px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lobster&display=swap" rel="stylesheet">
+</head>
+<body class="bg-amber-50 text-slate-700 min-h-screen flex flex-col items-center py-6 sm:py-10 px-4">
+
+    <div class="w-full max-w-3xl">
+        <header class="mb-8 text-center">
+            <h1 class="text-4xl sm:text-5xl font-bold text-amber-700" style="font-family: 'Lobster', cursive;">Summer Daily Checklist</h1>
+            <p class="text-slate-600 mt-2 text-sm sm:text-base">Your interactive guide to a fun and productive summer! Check off tasks as you complete them.</p>
+        </header>
+
+        <div class="mb-6 p-4 bg-white rounded-xl shadow-lg">
+            <h2 class="text-xl font-semibold text-amber-600 mb-2">Overall Progress</h2>
+            <div class="progress-bar-bg w-full h-6 rounded-full overflow-hidden">
+                <div id="overall-progress-bar" class="progress-bar-fill h-full rounded-full text-xs font-medium text-white text-center p-1 leading-none" style="width: 0%;">0%</div>
+            </div>
+        </div>
+
+        <main class="space-y-6">
+            <section id="morning-routine" class="section-card bg-sky-100 p-4 sm:p-6 rounded-xl shadow-lg">
+                <h2 class="text-2xl font-semibold text-sky-700 mb-1">☀️ Morning Routine</h2>
+                <p class="text-sm text-sky-600 mb-3">Start your day strong! Complete these tasks to get ready and help out.</p>
+                <div class="progress-bar-bg w-full h-4 rounded-full mb-4 overflow-hidden">
+                    <div id="morning-progress-bar" class="progress-bar-fill h-full bg-sky-500 rounded-full text-xs text-white text-center leading-none" style="width: 0%;">0%</div>
+                </div>
+                <div class="space-y-3">
+                    <div class="task-item" data-section="morning">
+                        <input type="checkbox" id="task-wake-up" class="mr-2 h-5 w-5 rounded border-gray-300 text-sky-600 focus:ring-sky-500 align-middle">
+                        <label for="task-wake-up" class="text-slate-700 align-middle">Brush teeth & hair</label>
+                    </div>
+                    <div class="task-item" data-section="morning">
+                        <input type="checkbox" id="task-dress" class="mr-2 h-5 w-5 rounded border-gray-300 text-sky-600 focus:ring-sky-500 align-middle">
+                        <label for="task-dress" class="text-slate-700 align-middle">Get dressed (out of pajamas!)</label>
+                    </div>
+                    <div class="task-item" data-section="morning">
+                        <input type="checkbox" id="task-make-bed" class="mr-2 h-5 w-5 rounded border-gray-300 text-sky-600 focus:ring-sky-500 align-middle">
+                        <label for="task-make-bed" class="text-slate-700 align-middle">Make your bed</label>
+                    </div>
+                    <div class="task-item" data-section="morning">
+                        <input type="checkbox" id="task-clean-bathroom" class="mr-2 h-5 w-5 rounded border-gray-300 text-sky-600 focus:ring-sky-500 align-middle">
+                        <label for="task-clean-bathroom" class="text-slate-700 align-middle">Clean bathroom (no toothpaste, toilets flushed, clear counter)</label>
+                    </div>
+                    <div class="task-item" data-section="morning">
+                        <input type="checkbox" id="task-feed-dogs-morning" class="mr-2 h-5 w-5 rounded border-gray-300 text-sky-600 focus:ring-sky-500 align-middle">
+                        <label for="task-feed-dogs-morning" class="text-slate-700 align-middle">Feed the dogs</label>
+                    </div>
+                    <div class="task-item" data-section="morning">
+                        <input type="checkbox" id="task-dogs-out-morning" class="mr-2 h-5 w-5 rounded border-gray-300 text-sky-600 focus:ring-sky-500 align-middle">
+                        <label for="task-dogs-out-morning" class="text-slate-700 align-middle">Let the dogs out (potty break)</label>
+                    </div>
+                    <div class="task-item" data-section="morning">
+                        <input type="checkbox" id="task-dog-water-morning" class="mr-2 h-5 w-5 rounded border-gray-300 text-sky-600 focus:ring-sky-500 align-middle">
+                        <label for="task-dog-water-morning" class="text-slate-700 align-middle">Refill dog water bowls</label>
+                    </div>
+                    <div class="task-item" data-section="morning">
+                        <input type="checkbox" id="task-breakfast" class="mr-2 h-5 w-5 rounded border-gray-300 text-sky-600 focus:ring-sky-500 align-middle">
+                        <label for="task-breakfast" class="text-slate-700 align-middle">Eat breakfast</label>
+                    </div>
+                    <div class="task-item" data-section="morning">
+                        <input type="checkbox" id="task-dishes-morning" class="mr-2 h-5 w-5 rounded border-gray-300 text-sky-600 focus:ring-sky-500 align-middle">
+                        <label for="task-dishes-morning" class="text-slate-700 align-middle">Put your dishes in dishwasher/wash</label>
+                    </div>
+                    <div class="task-item" data-section="morning">
+                        <input type="checkbox" id="task-wipe-area" class="mr-2 h-5 w-5 rounded border-gray-300 text-sky-600 focus:ring-sky-500 align-middle">
+                        <label for="task-wipe-area" class="text-slate-700 align-middle">Wipe down your eating area</label>
+                    </div>
+                </div>
+            </section>
+
+            <section id="midday-routine" class="section-card bg-orange-100 p-4 sm:p-6 rounded-xl shadow-lg">
+                <h2 class="text-2xl font-semibold text-orange-700 mb-1">🥪 Midday Munch & Tidy</h2>
+                <p class="text-sm text-orange-600 mb-3">Keep things clean and fuel up for the rest of your day!</p>
+                <div class="progress-bar-bg w-full h-4 rounded-full mb-4 overflow-hidden">
+                    <div id="midday-progress-bar" class="progress-bar-fill h-full bg-orange-500 rounded-full text-xs text-white text-center leading-none" style="width: 0%;">0%</div>
+                </div>
+                <div class="space-y-3">
+                    <div class="task-item" data-section="midday">
+                        <input type="checkbox" id="task-prep-lunch" class="mr-2 h-5 w-5 rounded border-gray-300 text-orange-600 focus:ring-orange-500 align-middle">
+                        <label for="task-prep-lunch" class="text-slate-700 align-middle">Prepare/Eat lunch</label>
+                    </div>
+                    <div class="task-item" data-section="midday">
+                        <input type="checkbox" id="task-lunch-dishes" class="mr-2 h-5 w-5 rounded border-gray-300 text-orange-600 focus:ring-orange-500 align-middle">
+                        <label for="task-lunch-dishes" class="text-slate-700 align-middle">Put lunch dishes in dishwasher/wash</label>
+                    </div>
+                    <div class="task-item" data-section="midday">
+                        <input type="checkbox" id="task-clean-counters" class="mr-2 h-5 w-5 rounded border-gray-300 text-orange-600 focus:ring-orange-500 align-middle">
+                        <label for="task-clean-counters" class="text-slate-700 align-middle">Wipe down kitchen counters (after use)</label>
+                    </div>
+                    <div class="task-item" data-section="midday">
+                        <input type="checkbox" id="task-put-away-stuff" class="mr-2 h-5 w-5 rounded border-gray-300 text-orange-600 focus:ring-orange-500 align-middle">
+                        <label for="task-put-away-stuff" class="text-slate-700 align-middle">Put away anything you took out (toys, books, etc.)</label>
+                    </div>
+                </div>
+            </section>
+
+            <section id="daily-tasks" class="section-card bg-emerald-100 p-4 sm:p-6 rounded-xl shadow-lg">
+                <h2 class="text-2xl font-semibold text-emerald-700 mb-1">📅 Daily Tasks</h2>
+                <p class="text-sm text-emerald-600 mb-3">Keep the day rolling with these important contributions and activities.</p>
+                <div class="progress-bar-bg w-full h-4 rounded-full mb-4 overflow-hidden">
+                    <div id="daily-progress-bar" class="progress-bar-fill h-full bg-emerald-500 rounded-full text-xs text-white text-center leading-none" style="width: 0%;">0%</div>
+                </div>
+                <div class="space-y-3">
+                    <div class="task-item" data-section="daily">
+                        <input type="checkbox" id="task-check-sink" class="mr-2 h-5 w-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500 align-middle">
+                        <label for="task-check-sink" class="text-slate-700 align-middle">Check sink for dishes and put them away/wash them</label>
+                    </div>
+                    <div class="task-item" data-section="daily">
+                        <input type="checkbox" id="task-tidy-living" class="mr-2 h-5 w-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500 align-middle">
+                        <label for="task-tidy-living" class="text-slate-700 align-middle">Tidy up main living area</label>
+                    </div>
+                    <div class="task-item" data-section="daily">
+                        <input type="checkbox" id="task-dogs-out-regularly" class="mr-2 h-5 w-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500 align-middle">
+                        <label for="task-dogs-out-regularly" class="text-slate-700 align-middle">Let dogs out every 2-3 hours</label>
+                    </div>
+                    <div class="task-item" data-section="daily">
+                        <input type="checkbox" id="task-play-dogs" class="mr-2 h-5 w-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500 align-middle">
+                        <label for="task-play-dogs" class="text-slate-700 align-middle">Play with dogs (at least 15 mins)</label>
+                    </div>
+                    <fieldset class="mt-4 border border-emerald-300 p-3 rounded-md">
+                        <legend class="text-md font-medium text-emerald-700 px-1">🧠 Productive Time (Choose ONE for 30-60 mins):</legend>
+                        <div class="task-item mt-2" data-section="daily" data-productive="true">
+                            <input type="checkbox" id="task-project" class="mr-2 h-5 w-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500 align-middle">
+                            <label for="task-project" class="text-slate-700 align-middle">Personal project (build, draw, craft)</label>
+                        </div>
+                        <div class="task-item" data-section="daily" data-productive="true">
+                            <input type="checkbox" id="task-write" class="mr-2 h-5 w-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500 align-middle">
+                            <label for="task-write" class="text-slate-700 align-middle">Write (journal, story)</label>
+                        </div>
+                        <div class="task-item" data-section="daily" data-productive="true">
+                            <input type="checkbox" id="task-instrument" class="mr-2 h-5 w-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500 align-middle">
+                            <label for="task-instrument" class="text-slate-700 align-middle">Practice musical instrument</label>
+                        </div>
+                        <div class="task-item" data-section="daily" data-productive="true">
+                            <input type="checkbox" id="task-puzzle" class="mr-2 h-5 w-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500 align-middle">
+                            <label for="task-puzzle" class="text-slate-700 align-middle">Work on puzzle or brain teaser</label>
+                        </div>
+                        <button id="generate-productive-ideas-btn" class="mt-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition duration-150 ease-in-out text-sm">
+                            Generate New Ideas ✨ <span id="loading-spinner" class="loading-spinner hidden"></span>
+                        </button>
+                        <div id="productive-ideas-output" class="mt-3 p-3 bg-emerald-50 rounded-md text-emerald-800 text-sm hidden">
+                            </div>
+                    </fieldset>
+                    <div class="task-item mt-3" data-section="daily">
+                        <input type="checkbox" id="task-read" class="mr-2 h-5 w-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500 align-middle">
+                        <label for="task-read" class="text-slate-700 align-middle">Read for at least 30 minutes (no screens!)</label>
+                    </div>
+                </div>
+            </section>
+
+            <section id="evening-routine" class="section-card bg-rose-100 p-4 sm:p-6 rounded-xl shadow-lg">
+                <h2 class="text-2xl font-semibold text-rose-700 mb-1">🌙 Afternoon/Evening Routine</h2>
+                <p class="text-sm text-rose-600 mb-3">Wind down your day by tidying up and taking care of final pet duties.</p>
+                <div class="progress-bar-bg w-full h-4 rounded-full mb-4 overflow-hidden">
+                    <div id="evening-progress-bar" class="progress-bar-fill h-full bg-rose-500 rounded-full text-xs text-white text-center leading-none" style="width: 0%;">0%</div>
+                </div>
+                <div class="space-y-3">
+                    <div class="task-item" data-section="evening">
+                        <input type="checkbox" id="task-tidy-day" class="mr-2 h-5 w-5 rounded border-gray-300 text-rose-600 focus:ring-rose-500 align-middle">
+                        <label for="task-tidy-day" class="text-slate-700 align-middle">Put away anything you got out during the day</label>
+                    </div>
+                    <div class="task-item" data-section="evening">
+                        <input type="checkbox" id="task-tidy-room" class="mr-2 h-5 w-5 rounded border-gray-300 text-rose-600 focus:ring-rose-500 align-middle">
+                        <label for="task-tidy-room" class="text-slate-700 align-middle">Make sure your room is generally tidy</label>
+                    </div>
+                    <div class="task-item" data-section="evening">
+                        <input type="checkbox" id="task-dogs-out-evening" class="mr-2 h-5 w-5 rounded border-gray-300 text-rose-600 focus:ring-rose-500 align-middle">
+                        <label for="task-dogs-out-evening" class="text-slate-700 align-middle">Let dogs out one last time</label>
+                    </div>
+                    <div class="task-item" data-section="evening">
+                        <input type="checkbox" id="task-dog-water-evening" class="mr-2 h-5 w-5 rounded border-gray-300 text-rose-600 focus:ring-rose-500 align-middle">
+                        <label for="task-dog-water-evening" class="text-slate-700 align-middle">Check dog food & water bowls</label>
+                    </div>
+                </div>
+            </section>
+
+            <section id="extra-ideas" class="section-card bg-purple-100 p-4 sm:p-6 rounded-xl shadow-lg">
+                <h2 class="text-2xl font-semibold text-purple-700 mb-1">🌟 Extra Ideas for Fun & Responsibility</h2>
+                <p class="text-sm text-purple-600 mb-3">Looking for more to do? Check these out! (These are optional and don't count towards main progress)</p>
+                <div class="space-y-3">
+                    <div class="task-item" data-section="extra">
+                        <input type="checkbox" id="task-outdoor" class="mr-2 h-5 w-5 rounded border-gray-300 text-purple-600 focus:ring-purple-500 align-middle">
+                        <label for="task-outdoor" class="text-slate-700 align-middle">Outdoor Time (1+ hour)</label>
+                    </div>
+                    <div class="task-item" data-section="extra">
+                        <input type="checkbox" id="task-help-meals" class="mr-2 h-5 w-5 rounded border-gray-300 text-purple-600 focus:ring-purple-500 align-middle">
+                        <label for="task-help-meals" class="text-slate-700 align-middle">Help with Meals</label>
+                    </div>
+                    <div class="task-item" data-section="extra">
+                        <input type="checkbox" id="task-learn-new" class="mr-2 h-5 w-5 rounded border-gray-300 text-purple-600 focus:ring-purple-500 align-middle">
+                        <label for="task-learn-new" class="text-slate-700 align-middle">Learn Something New</label>
+                    </div>
+                    <div class="task-item" data-section="extra">
+                        <input type="checkbox" id="task-creative-play" class="mr-2 h-5 w-5 rounded border-gray-300 text-purple-600 focus:ring-purple-500 align-middle">
+                        <label for="task-creative-play" class="text-slate-700 align-middle">Creative Play</label>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="mt-8 text-center">
+            <button id="reset-button" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-150 ease-in-out">
+                Reset for New Day ✨
+            </button>
+            <p class="text-xs text-slate-500 mt-4">Your progress is saved in this browser.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tasks = document.querySelectorAll('.task-item input[type="checkbox"]');
+            const sections = {
+                morning: { count: 0, completed: 0, bar: document.getElementById('morning-progress-bar'), tasks: [] },
+                midday: { count: 0, completed: 0, bar: document.getElementById('midday-progress-bar'), tasks: [] },
+                daily: { count: 0, completed: 0, bar: document.getElementById('daily-progress-bar'), tasks: [] },
+                evening: { count: 0, completed: 0, bar: document.getElementById('evening-progress-bar'), tasks: [] }
+            };
+            const overallProgressBar = document.getElementById('overall-progress-bar');
+            let totalTasks = 0;
+            let totalCompletedTasks = 0;
+
+            const productiveTasksGroup = [];
+
+            tasks.forEach(task => {
+                const sectionName = task.closest('.task-item').dataset.section;
+                if (sections[sectionName]) {
+                    sections[sectionName].count++;
+                    sections[sectionName].tasks.push(task);
+                    totalTasks++;
+
+                    if (task.closest('.task-item').dataset.productive === 'true') {
+                        productiveTasksGroup.push(task);
+                    }
+                }
+                task.addEventListener('change', () => {
+                    handleProductiveTaskChoice(task);
+                    updateProgress();
+                    saveProgress();
+                });
+            });
+            
+            function handleProductiveTaskChoice(changedTask) {
+                if (productiveTasksGroup.includes(changedTask) && changedTask.checked) {
+                    // This logic is simplified for "Choose ONE" instruction.
+                    // Each checked productive task will count towards progress.
+                }
+            }
+
+
+            function updateProgress() {
+                totalCompletedTasks = 0;
+                let mainTasksCount = 0;
+                let mainTasksCompleted = 0;
+
+                for (const sectionName in sections) {
+                    const section = sections[sectionName];
+                    section.completed = 0;
+                    section.tasks.forEach(task => {
+                        if (task.checked) {
+                            section.completed++;
+                        }
+                    });
+
+                    mainTasksCount += section.count;
+                    mainTasksCompleted += section.completed;
+                    
+                    const percentage = section.count > 0 ? (section.completed / section.count) * 100 : 0;
+                    section.bar.style.width = percentage + '%';
+                    section.bar.textContent = Math.round(percentage) + '%';
+                }
+                
+                totalCompletedTasks = mainTasksCompleted;
+                totalTasks = mainTasksCount;
+
+                const overallPercentage = totalTasks > 0 ? (totalCompletedTasks / totalTasks) * 100 : 0;
+                overallProgressBar.style.width = overallPercentage + '%';
+                overallProgressBar.textContent = Math.round(overallPercentage) + '%';
+
+                if (overallPercentage === 100) {
+                    overallProgressBar.classList.add('bg-green-500');
+                    overallProgressBar.textContent = "All Done! 🎉";
+                } else {
+                    overallProgressBar.classList.remove('bg-green-500');
+                }
+            }
+
+            function saveProgress() {
+                const progress = {};
+                tasks.forEach(task => {
+                    progress[task.id] = task.checked;
+                });
+                localStorage.setItem('summerChecklistProgress', JSON.stringify(progress));
+            }
+
+            function loadProgress() {
+                const savedProgress = JSON.parse(localStorage.getItem('summerChecklistProgress'));
+                if (savedProgress) {
+                    tasks.forEach(task => {
+                        if (savedProgress[task.id] !== undefined) {
+                            task.checked = savedProgress[task.id];
+                        }
+                    });
+                }
+                updateProgress();
+            }
+
+            document.getElementById('reset-button').addEventListener('click', () => {
+                if (confirm('Are you sure you want to reset all tasks for a new day?')) {
+                    tasks.forEach(task => {
+                        task.checked = false;
+                    });
+                    localStorage.removeItem('summerChecklistProgress');
+                    updateProgress();
+                }
+            });
+
+            loadProgress();
+
+           
